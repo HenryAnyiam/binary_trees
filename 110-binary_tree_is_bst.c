@@ -1,13 +1,26 @@
 #include "binary_trees.h"
-#include <stdio.h>
 
+/**
+ * enqueue - add to queue
+ * @queue: queue
+ * @last: end
+ * @tree: tree
+ */
 void enqueue(const binary_tree_t **queue, int *last, const binary_tree_t *tree)
 {
 	queue[*last] = tree;
 	(*last)++;
 }
 
-void fill(const binary_tree_t **queue, int *last, int *first, const binary_tree_t *tree)
+/**
+ * fill - fill queue
+ * @queue: queue
+ * @last: end
+ * @first: start
+ * @tree: tree
+ */
+void fill(const binary_tree_t **queue, int *last, int *first,
+		const binary_tree_t *tree)
 {
 	const binary_tree_t *temp = tree;
 	int i = 0;
@@ -15,23 +28,32 @@ void fill(const binary_tree_t **queue, int *last, int *first, const binary_tree_
 	enqueue(queue, last, tree);
 	(*first)++;
 	while (temp)
-        {
-                enqueue(queue, last, temp->left);
-                enqueue(queue, last, temp->right);
-                do {
-                        temp = queue[*first];
-                        (*first)++;
+	{
+		enqueue(queue, last, temp->left);
+		enqueue(queue, last, temp->right);
+		do {
+			temp = queue[*first];
+			(*first)++;
 			i++;
-                } while ((temp == NULL) && (i <= 2));
-        }
+		} while ((temp == NULL) && (i <= 2));
+	}
 }
 
+/**
+ * check - compares subtrees
+ * @queue: queue
+ * @last: end
+ * @digit: compare digit
+ * @sign: < or >
+ * )
+ * Return: 1 or 0
+ */
 int check(const binary_tree_t **queue, int last, int digit, int sign)
 {
 	int i;
 
 	for (i = 0; i <= last; i++)
-        {
+	{
 		if (queue[i] == NULL)
 			continue;
 		if (sign == 0)
@@ -44,7 +66,7 @@ int check(const binary_tree_t **queue, int last, int digit, int sign)
 			if (digit > (queue[i])->n)
 				return (0);
 		}
-        }
+	}
 	return (1);
 }
 /**
