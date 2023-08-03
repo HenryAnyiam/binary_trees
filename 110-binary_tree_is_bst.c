@@ -7,6 +7,46 @@ void enqueue(const binary_tree_t **queue, int *last, const binary_tree_t *tree)
 	(*last)++;
 }
 
+void fill(const binary_tree_t **queue, int *last, int *first, const binary_tree_t *tree)
+{
+	const binary_tree_t *temp = tree;
+	int i = 0;
+
+	enqueue(queue, last, tree);
+	(*first)++;
+	while (temp)
+        {
+                enqueue(queue, last, temp->left);
+                enqueue(queue, last, temp->right);
+                do {
+                        temp = queue[*first];
+                        (*first)++;
+			i++;
+                } while ((temp == NULL) && (i <= 2));
+        }
+}
+
+int check(const binary_tree_t **queue, int last, int digit, int sign)
+{
+	int i;
+
+	for (i = 0; i <= last; i++)
+        {
+		if (queue[i] == NULL)
+			continue;
+		if (sign == 0)
+		{
+			if (digit < (queue[i])->n)
+				return (0);
+		}
+		else
+		{
+			if (digit > (queue[i])->n)
+				return (0);
+		}
+        }
+	return (1);
+}
 /**
  * binary_tree_is_bst - check if a tree is a binary search tree
  * @tree: pointer to tree
@@ -16,48 +56,38 @@ void enqueue(const binary_tree_t **queue, int *last, const binary_tree_t *tree)
 int binary_tree_is_bst(const binary_tree_t *tree)
 {
 	const binary_tree_t *queue[100];
-	const binary_tree_t *hold, *temp = tree;
-	binarry_tree_t *left[50], *right[50];
-	int first = 1, last = 1, i, j, hold;
+	const binary_tree_t *temp = tree;
+	const binary_tree_t *left[100], *right[100];
+	int first = 0, last = 0, i, j, a, b = 0, c = 0, d = 0, e = 0;
 
 	if (tree == NULL)
 		return (0);
-	queue[0] = tree;
-	for (i = 1; i <= 100; i++)
+	for (i = 0; i <= 100; i++)
 	{
 		queue[i] = NULL;
-		if (i <= 50)
-		{
-			left[i] = NULL;
-			right[i] = NULL;
-		}
+		left[i] = NULL;
+		right[i] = NULL;
 	}
-	while (temp)
-	{
-		enqueue(queue, &last, temp->left);
-		enqueue(queue, &last, temp->right);
-		do {
-			temp = queue[first];
-			first++;
-		} while ((temp == NULL) && (first <= 100));
-	}
+	fill(queue, &last, &first, temp);
 	for (a = 0; a <= last; a++)
 	{
-		hold1 = queue[];
-		while (hold)
+		if (queue[a] != NULL)
 		{
-			enqueue(
-	for (i = 0; i <= last; i++)
-	{
-		for (j = 0; j < last; j += 2)
-		{
-			hold = (2 * i) + j;
-			if (queue[hold - 1] != NULL)
-				if ((queue[i])->n < (queue[hold - 1])->n)
-					return (0);
-			if (queue[hold] != NULL)
-				if ((queue[i])->n > (queue[hold])->n)
-					return (0);
+			fill(left, &c, &b, queue[a]->left);
+			fill(right, &e, &d, queue[a]->right);
+			i = check(left, c, (queue[a])->n, 0);
+			j = check(right, e, (queue[a])->n, 1);
+			if (i == 0 || j == 0)
+				return (0);
+			for (i = 0; i <= 50; i++)
+			{
+				left[i] = NULL;
+				right[i] = NULL;
+			}
+			b = 0;
+			c = 0;
+			d = 0;
+			e = 0;
 		}
 	}
 	return (1);
